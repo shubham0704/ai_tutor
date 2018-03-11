@@ -1,16 +1,9 @@
-# extract all triples and store them in npy format
-# import sys, os
-# sys.path.append(os.path.expanduser('~') + '/models/syntaxnet/')
+from __future__ import print_function
 from svo_extractor import get_svo, preprocess
 from sentence_selector import SentenceSelection
 import spacy
 import re
 nlp = spacy.load("en")
-# def preprocess(sent):
-
-# 	tok_sent = [word.lower() for word in sent.split()]
-# 	return tok_sent
-
 
 class QuestionGenerator:
 
@@ -25,7 +18,8 @@ class QuestionGenerator:
 
 		# Step1 take a sentence and triple so all those triples will act as fill in the blanks
 		tok_sent, doc = preprocess(sent)
-		triples = get_svo(doc)	
+		s,_,o = get_svo(doc)	
+		triples = (s,o)
 		# replace the token with a spl char like blank_0
 		# fill in the blanks type questions
 		questions = []
@@ -55,6 +49,8 @@ class QuestionGenerator:
 		return questions
 
 
+
+
 if __name__ == '__main__':
 
 	document = 'sun.txt'
@@ -70,4 +66,4 @@ if __name__ == '__main__':
 	#print questions
 	for question_set in questions:
 		for question in question_set:
-			print question,'\n'
+			print (question,'\n')

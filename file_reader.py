@@ -1,3 +1,4 @@
+from __future__ import print_function
 from os import listdir
 from os.path import isfile, join
 

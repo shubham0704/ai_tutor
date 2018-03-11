@@ -52,8 +52,8 @@ def get_svo(doc):
       continue
     if tok.dep_ == "nsubj":
       subs.append(str(tok))
-    # elif tok.tag_ == ["VBG", "VBD"] or tok.dep_ == "ROOT":
-    #   verbs.append(str(tok))
+    elif tok.tag_ == ["VBG", "VBD"] or tok.dep_ == "ROOT":
+      verbs.append(str(tok))
     elif tok.dep_ in ["iobj", "dobj", "pobj"]:#and tok.tag_ in ["NNP", "CD", "NN"]
       objs.append(str(tok))
 
@@ -81,21 +81,21 @@ def chain_capitalize(sent):
     if flag == 1:
       flag = 0
       continue
+    if len(str(tok)) > 1:
+      if tok[0].isupper() and tok[1].islower() or str(tok)=="of":
+        temp.append(tok)
+        if str(tok) == "of":
+          flag = 1
+          temp.append(tok_sent[i+1])
 
-    if tok[0].isupper() and tok[1].islower() or str(tok)=="of":
-      temp.append(tok)
-      if str(tok) == "of":
-        flag = 1
-        temp.append(tok_sent[i+1])
 
-
-    else:
-      
-      if len(temp) > 0:
-        new_tok = '_'.join(tok for tok in temp)
-        new_tok_sent.append(new_tok)
-      temp = []
-      new_tok_sent.append(tok)
+      else:
+        
+        if len(temp) > 0:
+          new_tok = '_'.join(tok for tok in temp)
+          new_tok_sent.append(new_tok)
+        temp = []
+        new_tok_sent.append(tok)
 
   # new_tok_sent = list(set(new_tok_sent))
   # return new_tok_sent
@@ -114,7 +114,8 @@ def preprocess(sent):
     return [word for word in sent.split()], nlp(sent.decode())
 
 if __name__ == '__main__':
-  sent = "Babur defeated Ibrahim Hussain Lodi at the First Battle of Panipat in 1526 CE and founded the Mughal empire"
+  #sent = "Babur defeated Ibrahim Hussain Lodi at the First Battle of Panipat in 1526 CE and founded the Mughal empire"
+  sent = "The Sun is the star at the center of the Solar System"
   nlp = spacy.load("en")
   # doc = nlp(sent.decode())
   # #print 'noun_chunks', list(doc.noun_chunks)
