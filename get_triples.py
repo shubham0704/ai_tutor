@@ -4,6 +4,7 @@
 from svo_extractor import get_svo, preprocess
 from sentence_selector import SentenceSelection
 import spacy
+import re
 nlp = spacy.load("en")
 # def preprocess(sent):
 
@@ -38,6 +39,11 @@ class QuestionGenerator:
 						answer = ele
 						questions.append((question,answer))
 						break
+					elif re.search("[0-9]+", token):
+						question[k] = 'blank_0'
+						answer = token
+						questions.append((question,answer))
+						break
 
 		return questions
 
@@ -51,9 +57,9 @@ class QuestionGenerator:
 
 if __name__ == '__main__':
 
-	document = 'babur.txt'
+	document = 'sun.txt'
 	qgen = QuestionGenerator()
-	ratio = 0.2
+	ratio = 0.4
 	ss = SentenceSelection(ratio=ratio)
 	sentences = ss.prepare_sentences(document)
 	sents = sentences.values()[:]

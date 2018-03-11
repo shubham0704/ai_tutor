@@ -75,9 +75,20 @@ def chain_capitalize(sent):
   tok_sent = [tok for tok in sent.split()]
   temp = []
   new_tok_sent = []
-  for tok in tok_sent:
+  flag = 0
+  for i, tok in enumerate(tok_sent):
+    
+    if flag == 1:
+      flag = 0
+      continue
+
     if tok[0].isupper() and tok[1].islower() or str(tok)=="of":
       temp.append(tok)
+      if str(tok) == "of":
+        flag = 1
+        temp.append(tok_sent[i+1])
+
+
     else:
       
       if len(temp) > 0:
