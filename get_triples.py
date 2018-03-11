@@ -54,7 +54,7 @@ class QuestionGenerator:
 if __name__ == '__main__':
 
 	document = 'sun.txt'
-	qgen = QuestionGenerator()
+	
 	ratio = 0.4
 	ss = SentenceSelection(ratio=ratio)
 	sentences = ss.prepare_sentences(document)
@@ -62,8 +62,10 @@ if __name__ == '__main__':
 	# for sent in sentences.values():
 	# 	sents.append(sent)
 	# print sents
+	qgen = QuestionGenerator()
 	questions = qgen.generate_questions(sents)
 	#print questions
 	for question_set in questions:
-		for question in question_set:
-			print (question,'\n')
+		# for question in question_set:
+		# 	print (question,'\n')
+		print(question_set)

@@ -3,6 +3,7 @@ from svo_extractor import get_svo, preprocess
 from sentence_selector import SentenceSelection
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.readwrite import json_graph
 import spacy
 import re
 from match import best_match, prepro
@@ -179,6 +180,11 @@ class GraphBuilder:
 		nx.draw(graph, labels=label_dict, with_labels=True)
 		plt.show()
 
+	def get_json(self):
+		data = json_graph.node_link_data(self.giant_graph) 
+		return data
+
+
 def main_concept(sents):
 	svos = []
 	for sent in sents:
@@ -204,6 +210,7 @@ def main_concept(sents):
 	freqs.sort(key=operator.itemgetter(1), reverse=True)
 	return freqs[0][0]
 
+
 if __name__ == '__main__':
 
 	document = 'mountains.txt'
@@ -212,11 +219,13 @@ if __name__ == '__main__':
 	ss = SentenceSelection(ratio=ratio)
 	sentences = ss.prepare_sentences(document)
 	sents = sentences.values()[:]
+	
 	mc  = main_concept(sents)
 	G = GraphBuilder(mc=mc)	
 	giant_graph = G.gen_giant_graph(sents)
 	#print giant_graph.nodes()
 	#print giant_graph.edges()
-	G.plot_graph(giant_graph)
+	print(str(G.get_json()))
+	#G.plot_graph(giant_graph)
 	# print sents
 	
