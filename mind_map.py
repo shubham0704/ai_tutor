@@ -213,7 +213,7 @@ def main_concept(sents):
 
 if __name__ == '__main__':
 
-	document = 'mountains.txt'
+	document = 'babur.txt'
 	# qgen = QuestionGenerator()
 	ratio = 0.8
 	ss = SentenceSelection(ratio=ratio)
@@ -225,7 +225,7 @@ if __name__ == '__main__':
 	giant_graph = G.gen_giant_graph(sents)
 	#print giant_graph.nodes()
 	#print giant_graph.edges()
-	print(str(G.get_json()))
-	#G.plot_graph(giant_graph)
+	# print(str(G.get_json()))
+	G.plot_graph(giant_graph)
 	# print sents
 	
