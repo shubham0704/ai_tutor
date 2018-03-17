@@ -17,7 +17,7 @@ class QuestionGenerator:
 		# return list of (question, answer)
 
 		# Step1 take a sentence and triple so all those triples will act as fill in the blanks
-		tok_sent, doc = preprocess(sent)
+		tok_sent, doc = preprocess(sent.decode('utf-8'))
 		s,_,o = get_svo(doc)	
 		triples = (s,o)
 		# replace the token with a spl char like blank_0
