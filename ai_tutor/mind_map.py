@@ -1,12 +1,14 @@
 from __future__ import print_function
-from svo_extractor import get_svo, preprocess
-from sentence_selector import SentenceSelection
+from ai_tutor.svo_extractor import get_svo, preprocess
+from ai_tutor.sentence_selector import SentenceSelection
+from ai_tutor.match import best_match, prepro
+
+# other dependencies
+from networkx.readwrite import json_graph
 import matplotlib.pyplot as plt
 import networkx as nx
-from networkx.readwrite import json_graph
 import spacy
 import re
-from match import best_match, prepro
 import operator
 import json
 
@@ -59,7 +61,7 @@ class GraphBuilder:
 		#print (joined_triple)
 		subject = joined_triple[0]
 		# first calculate how much do the subjects match
-		t = best_match(subject, mc)
+		t = best_match(subject, self.mc)
 		if t >= 95:
 			# if i have some object ill join it using an edge to the mc
 			obj = joined_triple[2]
@@ -101,49 +103,6 @@ class GraphBuilder:
 
 
 						
-		# for node in sorted(self.unique_dict.values()):
-		# 	print 'unique_dict is filled with - ', self.unique_dict.values()
-		# 	if self.unique_dict[joined_triple[0]]:
-		# 		src_id = self.unique_dict[joined_triple[0]]
-		# 	else:
-
-		# 		t = best_match(joined_triple[0], self.unique_words[node])
-		# 		# absorption of same concept
-		# 		print 'threshold value is', t
-		# 		if t >= threshold:
-		# 			src_id = node
-		# 	if self.unique_dict[joined_triple[2]]:
-		# 		dest_id = self.unique_dict[joined_triple[2]]
-		# 	else:
-		# 		t = best_match(joined_triple[2], self.unique_words[node])
-		# 		print t
-		# 		if t >= threshold:
-		# 			dest_id = node
-		# 	#select best matching concept
-
-
-	
-		# if src_id == -1:
-
-		# 	self.unique_dict[joined_triple[0]] = self.nid
-		# 	self.unique_words[self.nid] = joined_triple[0]
-		# 	src_id = self.nid
-		# 	#print self.nid
-		# 	self.nid += 1
-
-		# if dest_id == -1:
-		# 	self.unique_dict[joined_triple[2]] = self.nid
-		# 	self.unique_words[self.nid] = joined_triple[2]
-		# 	dest_id = self.nid
-		# 	self.nid += 1
-		# graph.add_node(src_id, {'label':joined_triple[0]})
-		# graph.add_node(dest_id, {'label':joined_triple[2]})
-		# graph.add_edge(
-		# 	  src_id,
-		# 	  dest_id,
-		# 	  key="parse_{}_{}".format(dest_id, src_id), label=joined_triple[1])
-		# #print graph.nodes()
-		# return graph
 
 	def get_graph(self, sent):
 		sent , doc = preprocess(sent)
@@ -211,6 +170,21 @@ def main_concept(sents):
 	freqs.sort(key=operator.itemgetter(1), reverse=True)
 	return freqs[0][0]
 
+
+def get_mind_map(document):
+	ratio = 0.8
+	ss = SentenceSelection(ratio=ratio)
+	sentences = ss.prepare_sentences(document)
+	sents = sentences.values()[:]
+	
+	mc  = main_concept(sents)
+	G = GraphBuilder(mc=mc)	
+	giant_graph = G.gen_giant_graph(sents)
+	js = G.get_json()
+	js = json.dumps(js)
+	with open('babur.json','w+') as f:
+		f.write(js)
+	print ("done")
 
 if __name__ == '__main__':
 

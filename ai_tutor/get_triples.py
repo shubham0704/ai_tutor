@@ -1,6 +1,6 @@
 from __future__ import print_function
-from svo_extractor import get_svo, preprocess
-from sentence_selector import SentenceSelection
+from ai_tutor.svo_extractor import get_svo, preprocess
+from ai_tutor.sentence_selector import SentenceSelection
 import spacy
 import re
 nlp = spacy.load("en")
