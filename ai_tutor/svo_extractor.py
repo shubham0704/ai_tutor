@@ -1,6 +1,7 @@
 # import sys, os
 # sys.path.append(os.path.expanduser('~') + '/models/syntaxnet/')
 # import tree_gen
+from __future__ import print_function
 import spacy
 import string
 from nltk import Tree
@@ -135,5 +136,5 @@ if __name__ == '__main__':
   # print sent
 
   alls = get_svo(doc)
-  print alls
+  print (alls)
   # print sent
