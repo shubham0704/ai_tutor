@@ -49,8 +49,9 @@ class QuestionGenerator:
 		answers	 = []
 		for question_set in questions:
 			for question in question_set:
+				question[0] = [word.replace('_', ' ') for word in question[0]]
 				newquestions.append(' '.join(question[0]))
-				answers.append(question[1])
+				answers.append(question[1].replace('_',' '))
 		return newquestions, answers
 
 
@@ -74,3 +75,4 @@ if __name__ == '__main__':
 	# 	# for question in question_set:
 	# 	# 	print (question,'\n')
 	# 	print(question_set)
+
