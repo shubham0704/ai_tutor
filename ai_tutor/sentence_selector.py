@@ -9,15 +9,14 @@ import os
 import nltk
 import math
 import string
+import textract
 import operator
-from ai_tutor.file_reader import File_Reader
 from collections import defaultdict, OrderedDict
 
 
 class SentenceSelection:
     """Select topically import sentences from given document"""
     def __init__(self,ratio=0.05):
-        self.fr = File_Reader()
         self.ratio = ratio
 
     def _load_sentences(self, file_name):
@@ -27,7 +26,9 @@ class SentenceSelection:
         Return:
                 sentences: sentences read from given document
         """
-        return self.fr.read_file(file_name)
+        text = textract.process(file_name)
+        newsents = [sent.decode('utf-8').strip() for sent in text.split('.')]
+        return newsents
 
     def _clean_sentences(self, sentences):
         """Clean sentences, remove digit, punctuation, upper case to lower
@@ -154,3 +155,4 @@ class SentenceSelection:
         important_sentences = self._topically_important_sentence(
             sentence_weight, sentences)
         return important_sentences
+
