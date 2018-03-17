@@ -111,11 +111,12 @@ def preprocess(sent):
     # print [(tok.text, tok.label_) for tok in doc.ents]
     sent = ngram_join(sent, list(doc.noun_chunks))
     #print sent
+    #print 'the noun chunks are', list(doc.noun_chunks)
     return [word for word in sent.split()], nlp(sent.decode())
 
 if __name__ == '__main__':
-  #sent = "Babur defeated Ibrahim Hussain Lodi at the First Battle of Panipat in 1526 CE and founded the Mughal empire"
-  sent = "The Sun is the star at the center of the Solar System"
+  sent = "Babur defeated Ibrahim Hussain Lodi at the First Battle of Panipat in 1526 CE and founded the Mughal empire"
+  #sent = "The Sun is the star at the center of the Solar System"
   nlp = spacy.load("en")
   # doc = nlp(sent.decode())
   # #print 'noun_chunks', list(doc.noun_chunks)
@@ -125,10 +126,11 @@ if __name__ == '__main__':
   # sent , doc = preprocess(sent)
   # print [(tok, tok.dep_, tok.tag_) for tok in doc]
    
-  # [to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+  #[to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
   # sent = chain_capitalize(sent)
   sent , doc = preprocess(sent)
-  print [(tok, tok.dep_, tok.tag_) for tok in doc]
+  #print [(tok, tok.dep_, tok.tag_) for tok in doc]
+  #[to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
   
   # print sent
 
