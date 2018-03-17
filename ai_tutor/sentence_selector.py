@@ -40,7 +40,6 @@ class SentenceSelection:
         flag = 0
         sentence_processed = {}
 
-        sentences = sentences.decode('utf-8')
 
         punc = set(string.punctuation)
         punc.remove('.')
