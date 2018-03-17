@@ -123,7 +123,7 @@ class SentenceSelection:
         for k, v in sentence_weight[0:num_sentences_selected]:
             sentences_selected_key.append(k)
             
-        for sentence in sentences.split('.'):
+        for sentence in sentences:
             if sentence:
                 sentences_dict[flag] = sentence
                 flag += 1
