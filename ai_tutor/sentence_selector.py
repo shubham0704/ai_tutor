@@ -13,8 +13,6 @@ import operator
 from ai_tutor.file_reader import File_Reader
 from collections import defaultdict, OrderedDict
 
-import sys
-reload(sys)
 sys.setdefaultencoding('utf8')
 
 
