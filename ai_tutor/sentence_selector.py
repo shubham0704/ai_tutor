@@ -10,7 +10,7 @@ import nltk
 import math
 import string
 import operator
-from file_reader import File_Reader
+from ai_tutor.file_reader import File_Reader
 from collections import defaultdict, OrderedDict
 
 import sys
