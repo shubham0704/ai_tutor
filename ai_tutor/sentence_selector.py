@@ -13,8 +13,6 @@ import operator
 from ai_tutor.file_reader import File_Reader
 from collections import defaultdict, OrderedDict
 
-sys.setdefaultencoding('utf8')
-
 
 class SentenceSelection:
     """Select topically import sentences from given document"""
