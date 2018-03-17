@@ -29,12 +29,12 @@ class QuestionGenerator:
 				question = tok_sent[:]
 				for k, token in enumerate(tok_sent):
 					if token == ele:
-						question[k] = 'blank_0'
+						question[k] = '____________'
 						answer = ele
 						questions.append((question,answer))
 						break
 					elif re.search("[0-9]+", token):
-						question[k] = 'blank_0'
+						question[k] = '____________'
 						answer = token
 						questions.append((question,answer))
 						break
@@ -45,8 +45,13 @@ class QuestionGenerator:
 		questions = []
 		for sent in sentences:
 			questions.append(self.get_questions(sent))
-
-		return questions
+		newquestions = []
+		answers	 = []
+		for question_set in questions:
+			for question in question_set:
+				newquestions.append(' '.join(question[0]))
+				answers.append(question[1])
+		return newquestions, answers
 
 
 
@@ -63,9 +68,9 @@ if __name__ == '__main__':
 	# 	sents.append(sent)
 	# print sents
 	qgen = QuestionGenerator()
-	questions = qgen.generate_questions(sents)
-	#print questions
-	for question_set in questions:
-		# for question in question_set:
-		# 	print (question,'\n')
-		print(question_set)
+	# questions = qgen.generate_questions(sents)
+	# #print questions
+	# for question_set in questions:
+	# 	# for question in question_set:
+	# 	# 	print (question,'\n')
+	# 	print(question_set)
