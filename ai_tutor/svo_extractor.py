@@ -49,7 +49,7 @@ def get_svo(doc):
   verbs = []
   objs = []
   for tok in doc:
-    print('toks in doc are', tok, tok.tag_)
+    #print('toks in doc are', tok, tok.tag_)
     if len(tok) < 3:
       continue
     if tok.dep_ == "nsubj" or tok.tag_ == 'CD' or tok.tag_ == "WD":
@@ -61,7 +61,7 @@ def get_svo(doc):
     elif tok.dep_ in ["iobj", "dobj", "pobj"]:#and tok.tag_ in ["NNP", "CD", "NN"]
       objs.append(str(tok))
 
-  return (subs, verbs, objs)    
+  return (list(set(subs)), list(set(verbs)), list(set(objs)))    
 
 
 def ngram_join(sent, nchunks):
