@@ -108,7 +108,7 @@ def chain_capitalize(sent):
 
 def preprocess(sent):
     sent = chain_capitalize(sent)
-    doc = nlp(sent.decode())
+    doc = nlp(sent.decode('utf-8'))
     # print [(tok.text, tok.label_) for tok in doc.ents]
     sent = ngram_join(sent, list(doc.noun_chunks))
     #print sent
