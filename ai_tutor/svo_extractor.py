@@ -45,21 +45,21 @@ nlp = spacy.load("en")
 
 def get_svo(doc):
 
-  subs = []
-  verbs = []
-  objs = []
-  for tok in doc:
+	subs = []
+	verbs = []
+	objs = []
+	for tok in doc:
 	#print('toks in doc are', tok, tok.tag_)
-	if len(tok) < 3:
-	  continue
-	if tok.dep_ == "nsubj" or tok.tag_ == "WD":
-	  subs.append(str(tok))
-	elif tok.tag_.startswith("NN") and len(tok.tag_) > 2:
-	  subs.append(str(tok))
-	elif tok.tag_ == ["VBG", "VBD", "VBG"] or tok.dep_ == "ROOT":
-	  verbs.append(str(tok))
-	elif tok.dep_ in ["iobj", "dobj", "pobj"] or tok.tag_ == 'CD':
-	  objs.append(str(tok))
+		if len(tok) < 3:
+		  continue
+		if tok.dep_ == "nsubj" or tok.tag_ == "WD":
+		  subs.append(str(tok))
+		elif tok.tag_.startswith("NN") and len(tok.tag_) > 2:
+		  subs.append(str(tok))
+		elif tok.tag_ == ["VBG", "VBD", "VBG"] or tok.dep_ == "ROOT":
+		  verbs.append(str(tok))
+		elif tok.dep_ in ["iobj", "dobj", "pobj"] or tok.tag_ == 'CD':
+		  objs.append(str(tok))
 
   return (list(set(subs)), list(set(verbs)), list(set(objs)))
 
