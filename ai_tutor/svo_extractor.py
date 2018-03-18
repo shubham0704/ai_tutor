@@ -61,7 +61,7 @@ def get_svo(doc):
 		elif tok.dep_ in ["iobj", "dobj", "pobj"] or tok.tag_ == 'CD':
 		  objs.append(str(tok))
 
-  return (list(set(subs)), list(set(verbs)), list(set(objs)))
+	return (list(set(subs)), list(set(verbs)), list(set(objs)))
 
 
 def ngram_join(sent, nchunks):
@@ -122,22 +122,22 @@ def preprocess(sent):
 	true_ncs = []
 	for nc in ncs:
 		nc_toks = str(nc).split(' ')
-	#print ('nc toks are', nc_toks)
-	num_toks = []
-	other_toks = []
+		#print ('nc toks are', nc_toks)
+		num_toks = []
+		other_toks = []
 		for tok in nc_toks:
-		try:
+			try:
 				if int(tok):
-			#print ('numtok is', tok)
-			num_toks.append(tok)
-		# remove the numtok from tok add tok to true_ncs
+				#print ('numtok is', tok)
+					num_toks.append(tok)
+			# remove the numtok from tok add tok to true_ncs
 			except:
-		#print ('other tok is', tok)
-		other_toks.append(tok)
-	true_nc = ' '.join(other_toks)
-	#print ('true nc is', true_nc)
-	true_ncs.extend(num_toks)
-	true_ncs.append(true_nc)
+			#print ('other tok is', tok)
+				other_toks.append(tok)
+		true_nc = ' '.join(other_toks)
+		#print ('true nc is', true_nc)
+		true_ncs.extend(num_toks)
+		true_ncs.append(true_nc)
 	ncs = true_ncs
 	#print ('noun_chunks are', ncs)
 
