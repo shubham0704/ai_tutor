@@ -17,7 +17,7 @@ class QuestionGenerator:
 		# return list of (question, answer)
 
 		# Step1 take a sentence and triple so all those triples will act as fill in the blanks
-		tok_sent, doc = preprocess(sent.decode('utf-8'))
+		tok_sent, doc = preprocess(sent)
 		s,_,o = get_svo(doc)	
 		triples = (s,o)
 		# replace the token with a spl char like blank_0
@@ -49,7 +49,7 @@ class QuestionGenerator:
 		answers	 = []
 		for question_set in questions:
 			for question in question_set:
-				temp = [word.replace('_', ' ') for word in temp]
+				temp = [word.replace('_', ' ') for word in question[0]]
 				newquestions.append(' '.join(temp))
 				answers.append(question[1].replace('_',' '))
 		return newquestions, answers

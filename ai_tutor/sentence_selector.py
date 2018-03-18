@@ -9,9 +9,10 @@ import os
 import nltk
 import math
 import string
-import textract
 import operator
+import textract
 from collections import defaultdict, OrderedDict
+
 
 
 class SentenceSelection:
@@ -26,10 +27,9 @@ class SentenceSelection:
         Return:
                 sentences: sentences read from given document
         """
-        text = textract.process(file_name)
-        newsents = [sent.decode('utf-8').strip() for sent in text.split('.')]
-        return newsents
-
+	text = textract.process(file_name)
+        return text	
+	
     def _clean_sentences(self, sentences):
         """Clean sentences, remove digit, punctuation, upper case to lower
         Args:
@@ -40,6 +40,7 @@ class SentenceSelection:
         flag = 0
         sentence_processed = {}
 
+        sentences = sentences.decode('utf-8')
 
         punc = set(string.punctuation)
         punc.remove('.')
@@ -123,7 +124,7 @@ class SentenceSelection:
         for k, v in sentence_weight[0:num_sentences_selected]:
             sentences_selected_key.append(k)
             
-        for sentence in sentences:
+        for sentence in sentences.split('.'):
             if sentence:
                 sentences_dict[flag] = sentence
                 flag += 1
@@ -154,4 +155,3 @@ class SentenceSelection:
         important_sentences = self._topically_important_sentence(
             sentence_weight, sentences)
         return important_sentences
-
