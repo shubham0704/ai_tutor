@@ -49,11 +49,14 @@ def get_svo(doc):
   verbs = []
   objs = []
   for tok in doc:
+    print('toks in doc are', tok, tok.tag_)
     if len(tok) < 3:
       continue
-    if tok.dep_ == "nsubj":
+    if tok.dep_ == "nsubj" or tok.tag_ == 'CD' or tok.tag_ == "WD":
       subs.append(str(tok))
-    elif tok.tag_ == ["VBG", "VBD"] or tok.dep_ == "ROOT":
+    elif tok.tag_.startswith("NN") and len(tok.tag_) > 2:
+      subs.append(str(tok)) 
+    elif tok.tag_ == ["VBG", "VBD", "VBG"] or tok.dep_ == "ROOT":
       verbs.append(str(tok))
     elif tok.dep_ in ["iobj", "dobj", "pobj"]:#and tok.tag_ in ["NNP", "CD", "NN"]
       objs.append(str(tok))
@@ -108,10 +111,38 @@ def chain_capitalize(sent):
 
 
 def preprocess(sent):
+    trans = string.maketrans(string.punctuation," "*len(string.punctuation))
+    sent = sent.translate(trans)		
     sent = chain_capitalize(sent)
+    #print ('chained sentence is', sent)
     doc = nlp(sent.decode('utf-8'))
     # print [(tok.text, tok.label_) for tok in doc.ents]
-    sent = ngram_join(sent, list(doc.noun_chunks))
+    ncs = list(doc.noun_chunks)
+    #print ('noun_chunks are', list(doc.noun_chunks))
+    true_ncs = []
+    for nc in ncs:
+        nc_toks = str(nc).split(' ')
+	#print ('nc toks are', nc_toks)	
+	num_toks = []
+	other_toks = []
+        for tok in nc_toks:
+	    try:
+                if int(tok):
+		    #print ('numtok is', tok)
+		    num_toks.append(tok)
+		# remove the numtok from tok add tok to true_ncs
+            except:
+		#print ('other tok is', tok)
+		other_toks.append(tok)
+	true_nc = ' '.join(other_toks)
+	#print ('true nc is', true_nc)	
+	true_ncs.extend(num_toks)
+	true_ncs.append(true_nc)
+    ncs = true_ncs	
+    #print ('noun_chunks are', ncs)
+                    
+
+    sent = ngram_join(sent, ncs)
     #print sent
     #print 'the noun chunks are', list(doc.noun_chunk4s)
     return [word.decode('utf-8') for word in sent.split()], nlp(sent.decode('utf-8'))
@@ -135,7 +166,7 @@ if __name__ == '__main__':
   #[to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
   
   # print sent
-
+  print (sent, doc)
   alls = get_svo(doc)
   print (alls)
   # print sent

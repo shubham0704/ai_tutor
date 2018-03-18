@@ -2,6 +2,7 @@ from __future__ import print_function
 from ai_tutor.svo_extractor import get_svo, preprocess
 from ai_tutor.sentence_selector import SentenceSelection
 import spacy
+import string
 import re
 nlp = spacy.load("en")
 
@@ -18,11 +19,13 @@ class QuestionGenerator:
 
 		# Step1 take a sentence and triple so all those triples will act as fill in the blanks
 		tok_sent, doc = preprocess(sent)
+		#print (tok_sent, doc)
 		s,_,o = get_svo(doc)	
 		triples = (s,o)
 		# replace the token with a spl char like blank_0
 		# fill in the blanks type questions
 		questions = []
+		#print ('subjects are - ',s, 'objects are -',o)
 
 		for i, svo in enumerate(triples):
 			for j, ele in enumerate(svo):
@@ -33,12 +36,12 @@ class QuestionGenerator:
 						answer = ele
 						questions.append((question,answer))
 						break
-					elif re.search("[0-9]+", token):
+					'''elif re.search("[0-9]+", token):
 						question[k] = 'blank0'
 						answer = token
 						questions.append((question,answer))
 						break
-
+					'''
 		return questions
 
 	def generate_questions(self, sentences):
@@ -59,7 +62,7 @@ class QuestionGenerator:
 
 if __name__ == '__main__':
 
-	document = 'sun.txt'
+	document = 'babur.txt'
 	
 	ratio = 0.4
 	ss = SentenceSelection(ratio=ratio)
@@ -67,8 +70,9 @@ if __name__ == '__main__':
 	sents = sentences.values()[:]
 	# for sent in sentences.values():
 	# 	sents.append(sent)
-	# print sents
-	qgen = QuestionGenerator()
+	print (sents)
+		
+	#qgen = QuestionGenerator()
 	# questions = qgen.generate_questions(sents)
 	# #print questions
 	# for question_set in questions:
