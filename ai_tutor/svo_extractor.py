@@ -51,61 +51,60 @@ def get_svo(doc):
 	for tok in doc:
 	#print('toks in doc are', tok, tok.tag_)
 		if len(tok) < 3:
-		  continue
+		    continue
 		if tok.dep_ == "nsubj" or tok.tag_ == "WD":
-		  subs.append(str(tok))
+		    subs.append(str(tok))
 		elif tok.tag_.startswith("NN") and len(tok.tag_) > 2:
-		  subs.append(str(tok))
+		    subs.append(str(tok))
 		elif tok.tag_ == ["VBG", "VBD", "VBG"] or tok.dep_ == "ROOT":
-		  verbs.append(str(tok))
+		    verbs.append(str(tok))
 		elif tok.dep_ in ["iobj", "dobj", "pobj"] or tok.tag_ == 'CD':
-		  objs.append(str(tok))
+		    objs.append(str(tok))
 
 	return (list(set(subs)), list(set(verbs)), list(set(objs)))
 
 
 def ngram_join(sent, nchunks):
-  for chunk in nchunks:
-	chunk = str(chunk)
-	#print chunk
-	chunk_tok = chunk.split()
+	for chunk in nchunks:
+		chunk = str(chunk)
+		#print chunk
+		chunk_tok = chunk.split()
 
-	ng_join = "_".join(e for e in chunk_tok)
-	# replace the entity in the string with ng_join
-	sent = string.replace(sent, chunk, ng_join)
-  return sent
+		ng_join = "_".join(e for e in chunk_tok)
+		# replace the entity in the string with ng_join
+		sent = string.replace(sent, chunk, ng_join)
+	return sent
 
 def chain_capitalize(sent):
-  tok_sent = [tok for tok in sent.split()]
-  temp = []
-  new_tok_sent = []
-  flag = 0
-  n = len(tok_sent)
-  for i, tok in enumerate(tok_sent):
+	tok_sent = [tok for tok in sent.split()]
+	temp = []
+	new_tok_sent = []
+	flag = 0
+	n = len(tok_sent)
+	for i, tok in enumerate(tok_sent):
+		
+		if flag == 1:
+		    flag = 0
+		    continue
+		if len(str(tok)) > 1:
+		    if tok[0].isupper() and tok[1].islower() or str(tok)=="of":
+			    temp.append(tok)
+			    if str(tok) == "of" and i+1<n:
+			        flag = 1
+			        temp.append(tok_sent[i+1])
 
-	if flag == 1:
-	  flag = 0
-	  continue
-	if len(str(tok)) > 1:
-	  if tok[0].isupper() and tok[1].islower() or str(tok)=="of":
-		temp.append(tok)
-		if str(tok) == "of" and i+1<n:
-		  flag = 1
-		  temp.append(tok_sent[i+1])
 
-
-	  else:
-
-		if len(temp) > 0:
-		  new_tok = '_'.join(tok for tok in temp)
-		  new_tok_sent.append(new_tok)
-		temp = []
-		new_tok_sent.append(tok)
+		else:
+			if len(temp) > 0:
+				new_tok = '_'.join(tok for tok in temp)
+				new_tok_sent.append(new_tok)
+				temp = []
+				new_tok_sent.append(tok)
 
   # new_tok_sent = list(set(new_tok_sent))
   # return new_tok_sent
   # for tok in tok_sent:
-  return ' '.join(tok for tok in new_tok_sent)
+	return ' '.join(tok for tok in new_tok_sent)
 
 
 
