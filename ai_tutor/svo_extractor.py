@@ -113,7 +113,7 @@ def preprocess(sent):
     sent = ngram_join(sent, list(doc.noun_chunks))
     #print sent
     #print 'the noun chunks are', list(doc.noun_chunks)
-    return [word for word in sent.split()], nlp(sent.decode())
+    return [word.decode('utf-8') for word in sent.split()], nlp(sent.decode('utf-8'))
 
 if __name__ == '__main__':
   sent = "Babur defeated Ibrahim Hussain Lodi at the First Battle of Panipat in 1526 CE and founded the Mughal empire"
