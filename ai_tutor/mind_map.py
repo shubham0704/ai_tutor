@@ -211,6 +211,4 @@ if __name__ == '__main__':
 	G.plot_graph(giant_graph)
 	# print sents
 
-vinayakjjw@gmail.com
-Vinayak1
 	
