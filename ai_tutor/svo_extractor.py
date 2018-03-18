@@ -77,6 +77,7 @@ def chain_capitalize(sent):
   temp = []
   new_tok_sent = []
   flag = 0
+  n = len(tok_sent)
   for i, tok in enumerate(tok_sent):
     
     if flag == 1:
@@ -85,7 +86,7 @@ def chain_capitalize(sent):
     if len(str(tok)) > 1:
       if tok[0].isupper() and tok[1].islower() or str(tok)=="of":
         temp.append(tok)
-        if str(tok) == "of":
+        if str(tok) == "of" and i+1<n:
           flag = 1
           temp.append(tok_sent[i+1])
 
@@ -112,7 +113,7 @@ def preprocess(sent):
     # print [(tok.text, tok.label_) for tok in doc.ents]
     sent = ngram_join(sent, list(doc.noun_chunks))
     #print sent
-    #print 'the noun chunks are', list(doc.noun_chunks)
+    #print 'the noun chunks are', list(doc.noun_chunk4s)
     return [word.decode('utf-8') for word in sent.split()], nlp(sent.decode('utf-8'))
 
 if __name__ == '__main__':
