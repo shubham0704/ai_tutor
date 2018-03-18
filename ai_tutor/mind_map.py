@@ -210,4 +210,7 @@ if __name__ == '__main__':
 	# print(str(G.get_json()))
 	G.plot_graph(giant_graph)
 	# print sents
+
+vinayakjjw@gmail.com
+Vinayak1
 	
