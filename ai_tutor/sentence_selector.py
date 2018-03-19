@@ -14,10 +14,10 @@ import textract
 from collections import defaultdict, OrderedDict
 
 
-
 class SentenceSelection:
     """Select topically import sentences from given document"""
-    def __init__(self,ratio=0.05):
+
+    def __init__(self, ratio=0.05):
         self.ratio = ratio
 
     def _load_sentences(self, file_name):
@@ -27,9 +27,9 @@ class SentenceSelection:
         Return:
                 sentences: sentences read from given document
         """
-	text = textract.process(file_name)
-        return text	
-	
+        text = textract.process(file_name)
+        return text
+
     def _clean_sentences(self, sentences):
         """Clean sentences, remove digit, punctuation, upper case to lower
         Args:
@@ -98,7 +98,7 @@ class SentenceSelection:
                     sentence_weight[sentence_id] = word_distribution[word]
 
             sentence_weight[sentence_id] = sentence_weight[
-                sentence_id] / float(len(sentence_processed[sentence_id]))
+                                               sentence_id] / float(len(sentence_processed[sentence_id]))
 
         sentence_weight = sorted(sentence_weight.items(
         ), key=operator.itemgetter(1), reverse=True)
@@ -123,7 +123,7 @@ class SentenceSelection:
         flag = 0
         for k, v in sentence_weight[0:num_sentences_selected]:
             sentences_selected_key.append(k)
-            
+
         for sentence in sentences.split('.'):
             if sentence:
                 sentences_dict[flag] = sentence
@@ -132,7 +132,7 @@ class SentenceSelection:
         sentences_selected = OrderedDict()
 
         for key in sentences_selected_key:
-            sentences_selected[key] = sentences_dict[key]   
+            sentences_selected[key] = sentences_dict[key]
         return sentences_selected
 
     def prepare_sentences(self, file_name):
