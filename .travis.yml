@@ -7,9 +7,10 @@
   - chmod +x install_requirements.sh
   
   addons:
-  apt_packages:
-    - swig
-  
+    apt_packages:
+      - swig
+      - libpulse-dev
+
   install:
      - ./install_requirements.sh
   script:
