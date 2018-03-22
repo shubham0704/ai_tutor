@@ -2,7 +2,6 @@
 Ref: Nenkova A, Vanderwende L. The impact of frequency on summarization[J].
      Microsoft Research, Redmond, Washington, Tech.
      Rep. MSR-TR-2005-101, 2005.
-Code: __author__ == shubham0704
 """
 from __future__ import print_function
 import os
@@ -52,7 +51,7 @@ class SentenceSelection:
         stop_words = nltk.corpus.stopwords.words('english')
         stemmer = nltk.stem.PorterStemmer()
         tokenize = nltk.word_tokenize
-
+        
         for sentence in sentences.split('.'):
             sentence = sentence.strip()
             sentence = [stemmer.stem(word) for word in tokenize(
@@ -112,6 +111,7 @@ class SentenceSelection:
         Return:
                 sentences_selected: dict, topically important sentences selected
         """
+        sentences = sentences.decode('utf-8')
         sentence_length = len(sentence_weight)
         # how many sentences to retain
         num_sentences_selected = math.ceil(float(self.ratio) * sentence_length)

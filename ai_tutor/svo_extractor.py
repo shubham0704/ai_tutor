@@ -74,7 +74,7 @@ def ngram_join(sent, nchunks):
 
         ng_join = "_".join(e for e in chunk_tok)
         # replace the entity in the string with ng_join
-        sent = string.replace(sent, chunk, ng_join)
+        sent = str.replace(sent, chunk, ng_join)
     return sent
 
 
@@ -112,11 +112,11 @@ def chain_capitalize(sent):
 
 
 def preprocess(sent):
-    trans = string.maketrans(string.punctuation, " " * len(string.punctuation))
+    trans = str.maketrans(string.punctuation, " " * len(string.punctuation))
     sent = sent.translate(trans)
     sent = chain_capitalize(sent)
     # print ('chained sentence is', sent)
-    doc = nlp(sent.decode('utf-8'))
+    doc = nlp(sent)
     # print [(tok.text, tok.label_) for tok in doc.ents]
     ncs = list(doc.noun_chunks)
     # print ('noun_chunks are', list(doc.noun_chunks))
@@ -146,7 +146,7 @@ def preprocess(sent):
     sent = ngram_join(sent, ncs)
     # print sent
     # print 'the noun chunks are', list(doc.noun_chunk4s)
-    return [word.decode('utf-8') for word in sent.split()], nlp(sent.decode('utf-8'))
+    return [word for word in sent.split()], nlp(sent)
 
 
 if __name__ == '__main__':
