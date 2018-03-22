@@ -1,3 +1,4 @@
+#! /bin/bash
 pip install spacy
 pip install nltk
 python -m spacy download en

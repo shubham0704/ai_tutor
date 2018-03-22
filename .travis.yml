@@ -3,8 +3,11 @@
   python:
     - "3.5"
     - "3.6"
+  before_install:
+  - chmod +x install_requirements.sh
+  
   install:
-    ./install_requirements.sh
+     - ./install_requirements.sh
   script:
     - pytest test/
 
