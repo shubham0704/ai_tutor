@@ -3,4 +3,5 @@ pip install spacy
 pip install nltk
 python -m spacy download en
 python -m nltk.downloader stopwords
+python -m nltk.downloader punkt
 pip install textract
