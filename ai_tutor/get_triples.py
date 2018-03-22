@@ -36,12 +36,7 @@ class QuestionGenerator:
                         answer = ele
                         questions.append((question, answer))
                         break
-                    '''elif re.search("[0-9]+", token):
-                        question[k] = 'blank0'
-                        answer = token
-                        questions.append((question,answer))
-                        break
-                    '''
+
         return questions
 
     def generate_questions(self, sentences):
@@ -56,23 +51,3 @@ class QuestionGenerator:
                 newquestions.append(' '.join(temp))
                 answers.append(question[1].replace('_', ' '))
         return newquestions, answers
-
-
-if __name__ == '__main__':
-    document = 'babur.txt'
-
-    ratio = 0.4
-    ss = SentenceSelection(ratio=ratio)
-    sentences = ss.prepare_sentences(document)
-    sents = sentences.values()[:]
-    # for sent in sentences.values():
-    # 	sents.append(sent)
-    print(sents)
-
-# qgen = QuestionGenerator()
-# questions = qgen.generate_questions(sents)
-# #print questions
-# for question_set in questions:
-# 	# for question in question_set:
-# 	# 	print (question,'\n')
-# 	print(question_set)

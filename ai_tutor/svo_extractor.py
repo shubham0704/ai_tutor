@@ -15,34 +15,6 @@ def to_nltk_tree(node):
         return node.orth_
 
 
-# def get_svo(text):
-#   #subs = objs = verbs = None
-#   subs = []
-#   verbs = []
-#   objs = []
-#   parse_tree = tree_gen.get_tree(text)
-#   print parse_tree
-#   for token in parse_tree.token:
-#     '''
-#     if token.label == 'nsubj':
-#       subs = token.word
-#     elif token.label == 'root':
-#       verbs = token.word
-#     elif token.label == 'obj':
-#       obj = token.word
-#     else:
-#       pass
-#     '''
-
-#     if "subj" in token.label:
-#       subs.append(token.word)
-#     elif token.label in ["root", "ex", "md"] or token.label.startswith("v"):
-#       verbs.append(token.word)
-#     elif "obj" in token.label or token.label.startswith("ob") or token.label=="nummod":
-#       objs.append(token.word)
-
-
-#   return (subs, verbs, objs)
 nlp = spacy.load("en")
 
 
@@ -51,7 +23,7 @@ def get_svo(doc):
     verbs = []
     objs = []
     for tok in doc:
-        # print('toks in doc are', tok, tok.tag_)
+        
         if len(tok) < 3:
             continue
         if tok.dep_ == "nsubj" or tok.tag_ == "WD":
@@ -105,9 +77,6 @@ def chain_capitalize(sent):
                 temp = []
                 new_tok_sent.append(tok)
 
-                # new_tok_sent = list(set(new_tok_sent))
-                # return new_tok_sent
-                # for tok in tok_sent:
     return ' '.join(tok for tok in new_tok_sent)
 
 

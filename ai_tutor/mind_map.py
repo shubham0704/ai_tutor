@@ -28,7 +28,7 @@ class GraphBuilder:
         self.unique_words[self.nid] = self.mc
         self.nid += 1
 
-    def gen_graph(self, triples, threshold=60):
+    def _gen_graph(self, triples, threshold=60):
 
         # check if length of the each triple is >0
         cnt = 0
@@ -98,33 +98,21 @@ class GraphBuilder:
                     key="parse_{}_{}".format(self.nid, subj_id), label=joined_triple[1])
                 self.nid += 1
 
-    def get_graph(self, sent):
+    def _get_graph(self, sent):
         sent, doc = preprocess(sent)
         triples = get_svo(doc)
         # print triples
         return self.gen_graph(triples)
 
-    def gen_giant_graph(self, sents):
+    def _gen_giant_graph(self, sents):
 
-        # giant_graph = nx.Graph()
-        # graphs = []
-        # for sent in sents:
-        # 	try:
-        # 		graph = self.get_graph(sent)
-        # 		print graph.nodes()
-        # 		# graphs.append(graph)
-        # 		if graph:
-        # 			print "got a graph"
-        # 			giant_graph = nx.compose(graph, giant_graph)
-        # 	except:
-        # 		pass
+
         for sent in sents:
             self.get_graph(sent)
         # select which 2 graphs to concatenate at a time
-
         return self.giant_graph
 
-    def plot_graph(self, graph):
+    def _plot_graph(self, graph):
         pos = nx.spring_layout(graph)
         label_dict = {}
         for node in graph.nodes():
@@ -133,7 +121,7 @@ class GraphBuilder:
         nx.draw(graph, labels=label_dict, with_labels=True)
         plt.show()
 
-    def get_json(self):
+    def _get_json(self):
         data = json_graph.tree_data(self.giant_graph, root=0)
         return data
 
