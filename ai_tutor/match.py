@@ -10,7 +10,7 @@ stop_words = set(stopwords.words('english'))
 
 word_punct_tokenizer = WordPunctTokenizer()
 punc = "_,,.!?:;()<>[]$=-/"
-table = string.maketrans(punc, " " * len(punc))
+table = str.maketrans(punc, " " * len(punc))
 
 
 def prepro(sent):
@@ -23,13 +23,8 @@ def prepro(sent):
 
 
 def best_match(a, b):
-    # tok_a = [tok for tok in a.split("_")]
-    # tok_b = [tok for tok in b.split("_")]
+ 
     a = prepro(a)
     b = prepro(b)
     print(a, b)
     return fuzz.token_set_ratio(a, b)
-
-
-if __name__ == '__main__':
-    print(best_match("The_prophet_of_Mecca and Medina", "Mecca_Medina"))
