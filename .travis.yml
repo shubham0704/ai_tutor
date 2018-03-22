@@ -3,7 +3,7 @@
     - "3.5"
     - "3.6"
   install:
-    pip install -r requirements.txt
+    ./install_requirements.sh
   script:
     - pytest test/
 
