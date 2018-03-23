@@ -2,6 +2,7 @@
 /include/*
 /lib/*
 /man/*
+/share/*
 *.pyc
 *.cache/*
 *.pytest_cache/*

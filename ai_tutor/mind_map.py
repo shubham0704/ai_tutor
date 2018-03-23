@@ -23,12 +23,12 @@ class GraphBuilder:
 
     def __init__(self, mc):
         self.mc = mc
-        self.giant_graph.add_node(self.nid, {'label': self.mc})
+        self.giant_graph.add_node(self.nid, attr_dict={'label': self.mc})
         self.unique_dict[self.mc] = self.nid
         self.unique_words[self.nid] = self.mc
         self.nid += 1
 
-    def _gen_graph(self, triples, threshold=60):
+    def gen_graph(self, triples, threshold=60):
 
         # check if length of the each triple is >0
         cnt = 0
@@ -59,52 +59,54 @@ class GraphBuilder:
         # print (joined_triple)
         subject = joined_triple[0]
         # first calculate how much do the subjects match
-        t = best_match(subject, self.mc)
-        if t >= 95:
-            # if i have some object ill join it using an edge to the mc
-            obj = joined_triple[2]
-            if obj:
-                if obj not in self.unique_dict:
-                    self.unique_dict[obj] = self.nid
-                    self.unique_words[self.nid] = obj
-                    self.giant_graph.add_node(self.nid, {'label': obj})
-                    self.giant_graph.add_edge(
-                        0,
-                        self.nid,
-                        key="parse_{}_{}".format(self.nid, 0), label=joined_triple[1])
-                    self.nid += 1
-        elif subject:
-            # option 1 just concatenate with graph
-            # option 2 just add the node with the graph
-            # I choose option2
-            if subject not in self.unique_dict:
-                self.unique_dict[subject] = self.nid
-                self.unique_words[self.nid] = subject
-                self.giant_graph.add_node(self.nid, {'label': subject})
-                self.giant_graph.add_edge(
-                    0,
-                    self.nid,
-                    key="parse_{}_{}".format(self.nid, 0))
-                self.nid += 1
-            obj = joined_triple[2]
-            if obj not in self.unique_dict:
-                self.unique_dict[obj] = self.nid
-                self.unique_words[self.nid] = obj
-                self.giant_graph.add_node(self.nid, {'label': obj})
-                subj_id = self.unique_dict[subject]
-                self.giant_graph.add_edge(
-                    subj_id,
-                    self.nid,
-                    key="parse_{}_{}".format(self.nid, subj_id), label=joined_triple[1])
-                self.nid += 1
+        if subject != '':
+        	print("The main concept is given as: ", self.mc)
+        	t = best_match(subject, self.mc)
+	        if t >= 95:
+	            # if i have some object ill join it using an edge to the mc
+	            obj = joined_triple[2]
+	            if obj:
+	                if obj not in self.unique_dict:
+	                    self.unique_dict[obj] = self.nid
+	                    self.unique_words[self.nid] = obj
+	                    self.giant_graph.add_node(self.nid, attr_dict={'label': obj})
+	                    self.giant_graph.add_edge(
+	                        0,
+	                        self.nid,
+	                        key="parse_{}_{}".format(self.nid, 0), label=joined_triple[1])
+	                    self.nid += 1
+	        elif subject:
+	            # option 1 just concatenate with graph
+	            # option 2 just add the node with the graph
+	            # I choose option2
+	            if subject not in self.unique_dict:
+	                self.unique_dict[subject] = self.nid
+	                self.unique_words[self.nid] = subject
+	                self.giant_graph.add_node(self.nid, attr_dict={'label': subject})
+	                self.giant_graph.add_edge(
+	                    0,
+	                    self.nid,
+	                    key="parse_{}_{}".format(self.nid, 0))
+	                self.nid += 1
+	            obj = joined_triple[2]
+	            if obj not in self.unique_dict and obj != '':
+	                self.unique_dict[obj] = self.nid
+	                self.unique_words[self.nid] = obj
+	                self.giant_graph.add_node(self.nid, attr_dict={'label': obj})
+	                subj_id = self.unique_dict[subject]
+	                self.giant_graph.add_edge(
+	                    subj_id,
+	                    self.nid,
+	                    key="parse_{}_{}".format(self.nid, subj_id), label=joined_triple[1])
+	                self.nid += 1
 
-    def _get_graph(self, sent):
+    def get_graph(self, sent):
         sent, doc = preprocess(sent)
         triples = get_svo(doc)
         # print triples
         return self.gen_graph(triples)
 
-    def _gen_giant_graph(self, sents):
+    def gen_giant_graph(self, sents):
 
 
         for sent in sents:
@@ -112,7 +114,7 @@ class GraphBuilder:
         # select which 2 graphs to concatenate at a time
         return self.giant_graph
 
-    def _plot_graph(self, graph):
+    def plot_graph(self, graph):
         pos = nx.spring_layout(graph)
         label_dict = {}
         for node in graph.nodes():
@@ -121,7 +123,7 @@ class GraphBuilder:
         nx.draw(graph, labels=label_dict, with_labels=True)
         plt.show()
 
-    def _get_json(self):
+    def get_json(self):
         data = json_graph.tree_data(self.giant_graph, root=0)
         return data
 
@@ -131,15 +133,16 @@ def main_concept(sents):
     for sent in sents:
         _, doc = preprocess(sent)
         svos.append(get_svo(doc))
-    # print svos
+    #print (svos)
     subjects = [svo[0] for svo in svos]
     # subjects = svos[:][0]
 
     # find the most prominent subject
+    # step 1: find individual token frequencies
     freq_dict = {}
     for subj in subjects:
         subj = " ".join(ele for ele in subj)
-        subj = prepro(subj)
+        #subj = prepro(subj)
         if subj:
             tok_subj = subj.split()
             for tok in tok_subj:
@@ -147,8 +150,12 @@ def main_concept(sents):
                     freq_dict[tok] += 1
                 else:
                     freq_dict[tok] = 1
+
     freqs = freq_dict.items()
-    freqs.sort(key=operator.itemgetter(1), reverse=True)
+    print(freqs)
+    freqs = sorted(freqs, key=operator.itemgetter(1), reverse=True)
+
+    #print(freqs)
     return freqs[0][0]
 
 
@@ -163,9 +170,9 @@ def get_mind_map(document):
     giant_graph = G.gen_giant_graph(sents)
     js = G.get_json()
     js = json.dumps(js)
-    with open('babur.json', 'w+') as f:
-        f.write(js)
-    print("done")
+    # with open('babur.json', 'w+') as f:
+    #     f.write(js)
+    # print("done")
 
 
 if __name__ == '__main__':
