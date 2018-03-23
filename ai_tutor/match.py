@@ -26,5 +26,4 @@ def best_match(a, b):
  
     a = prepro(a)
     b = prepro(b)
-    print(a, b)
     return fuzz.token_set_ratio(a, b)

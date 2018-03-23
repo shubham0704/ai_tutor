@@ -23,7 +23,7 @@ class GraphBuilder:
 
     def __init__(self, mc):
         self.mc = mc
-        self.giant_graph.add_node(self.nid, attr_dict={'label': self.mc})
+        self.giant_graph.add_node(self.nid, label=self.mc)
         self.unique_dict[self.mc] = self.nid
         self.unique_words[self.nid] = self.mc
         self.nid += 1
@@ -60,7 +60,7 @@ class GraphBuilder:
         subject = joined_triple[0]
         # first calculate how much do the subjects match
         if subject != '':
-        	print("The main concept is given as: ", self.mc)
+        	#print("The main concept is given as: ", self.mc)
         	t = best_match(subject, self.mc)
 	        if t >= 95:
 	            # if i have some object ill join it using an edge to the mc
@@ -69,7 +69,7 @@ class GraphBuilder:
 	                if obj not in self.unique_dict:
 	                    self.unique_dict[obj] = self.nid
 	                    self.unique_words[self.nid] = obj
-	                    self.giant_graph.add_node(self.nid, attr_dict={'label': obj})
+	                    self.giant_graph.add_node(self.nid, label=obj)
 	                    self.giant_graph.add_edge(
 	                        0,
 	                        self.nid,
@@ -82,7 +82,7 @@ class GraphBuilder:
 	            if subject not in self.unique_dict:
 	                self.unique_dict[subject] = self.nid
 	                self.unique_words[self.nid] = subject
-	                self.giant_graph.add_node(self.nid, attr_dict={'label': subject})
+	                self.giant_graph.add_node(self.nid, label=subject)
 	                self.giant_graph.add_edge(
 	                    0,
 	                    self.nid,
@@ -92,7 +92,7 @@ class GraphBuilder:
 	            if obj not in self.unique_dict and obj != '':
 	                self.unique_dict[obj] = self.nid
 	                self.unique_words[self.nid] = obj
-	                self.giant_graph.add_node(self.nid, attr_dict={'label': obj})
+	                self.giant_graph.add_node(self.nid, label=obj)
 	                subj_id = self.unique_dict[subject]
 	                self.giant_graph.add_edge(
 	                    subj_id,
@@ -152,7 +152,7 @@ def main_concept(sents):
                     freq_dict[tok] = 1
 
     freqs = freq_dict.items()
-    print(freqs)
+    #print(freqs)
     freqs = sorted(freqs, key=operator.itemgetter(1), reverse=True)
 
     #print(freqs)
@@ -163,13 +163,15 @@ def get_mind_map(document):
     ratio = 0.8
     ss = SentenceSelection(ratio=ratio)
     sentences = ss.prepare_sentences(document)
-    sents = sentences.values()[:]
+    sents = list(sentences.values())[:]
 
     mc = main_concept(sents)
     G = GraphBuilder(mc=mc)
     giant_graph = G.gen_giant_graph(sents)
     js = G.get_json()
     js = json.dumps(js)
+    print(js)
+    #G.plot_graph(giant_graph)
     # with open('babur.json', 'w+') as f:
     #     f.write(js)
     # print("done")

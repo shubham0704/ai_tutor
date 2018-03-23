@@ -15,14 +15,10 @@ class QuestionGenerator:
     def get_questions(self, sent):
 
         # given a sentence generate questions
-        # return list of (question, answer)
-
-        # Step1 take a sentence and triple so all those triples will act as fill in the blanks
         tok_sent, doc = preprocess(sent)
-        # print (tok_sent, doc)
+        # print (tok_sent, doc) 
         s, _, o = get_svo(doc)
         triples = (s, o)
-        # replace the token with a spl char like blank_0
         # fill in the blanks type questions
         questions = []
         # print ('subjects are - ',s, 'objects are -',o)
