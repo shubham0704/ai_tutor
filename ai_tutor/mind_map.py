@@ -19,9 +19,9 @@ class GraphBuilder:
     unique_dict = {}
     nid = 0
     unique_words = {}
-    giant_graph = nx.DiGraph()
 
     def __init__(self, mc):
+        self.giant_graph = nx.DiGraph()
         self.mc = mc
         self.giant_graph.add_node(self.nid, label=self.mc)
         self.unique_dict[self.mc] = self.nid
