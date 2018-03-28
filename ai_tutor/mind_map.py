@@ -60,45 +60,45 @@ class GraphBuilder:
         subject = joined_triple[0]
         # first calculate how much do the subjects match
         if subject != '':
-        	#print("The main concept is given as: ", self.mc)
-        	t = best_match(subject, self.mc)
-	        if t >= 95:
-	            # if i have some object ill join it using an edge to the mc
-	            obj = joined_triple[2]
-	            if obj:
-	                if obj not in self.unique_dict:
-	                    self.unique_dict[obj] = self.nid
-	                    self.unique_words[self.nid] = obj
-	                    self.giant_graph.add_node(self.nid, label=obj)
-	                    self.giant_graph.add_edge(
-	                        0,
-	                        self.nid,
-	                        key="parse_{}_{}".format(self.nid, 0), label=joined_triple[1])
-	                    self.nid += 1
-	        elif subject:
-	            # option 1 just concatenate with graph
-	            # option 2 just add the node with the graph
-	            # I choose option2
-	            if subject not in self.unique_dict:
-	                self.unique_dict[subject] = self.nid
-	                self.unique_words[self.nid] = subject
-	                self.giant_graph.add_node(self.nid, label=subject)
-	                self.giant_graph.add_edge(
-	                    0,
-	                    self.nid,
-	                    key="parse_{}_{}".format(self.nid, 0))
-	                self.nid += 1
-	            obj = joined_triple[2]
-	            if obj not in self.unique_dict and obj != '':
-	                self.unique_dict[obj] = self.nid
-	                self.unique_words[self.nid] = obj
-	                self.giant_graph.add_node(self.nid, label=obj)
-	                subj_id = self.unique_dict[subject]
-	                self.giant_graph.add_edge(
-	                    subj_id,
-	                    self.nid,
-	                    key="parse_{}_{}".format(self.nid, subj_id), label=joined_triple[1])
-	                self.nid += 1
+            # print("The main concept is given as: ", self.mc)
+            t = best_match(subject, self.mc)
+            if t >= 95:
+                # if i have some object ill join it using an edge to the mc
+                obj = joined_triple[2]
+                if obj:
+                    if obj not in self.unique_dict:
+                        self.unique_dict[obj] = self.nid
+                        self.unique_words[self.nid] = obj
+                        self.giant_graph.add_node(self.nid, label=obj)
+                        self.giant_graph.add_edge(
+                            0,
+                            self.nid,
+                            key="parse_{}_{}".format(self.nid, 0), label=joined_triple[1])
+                        self.nid += 1
+            elif subject:
+                # option 1 just concatenate with graph
+                # option 2 just add the node with the graph
+                # I choose option2
+                if subject not in self.unique_dict:
+                    self.unique_dict[subject] = self.nid
+                    self.unique_words[self.nid] = subject
+                    self.giant_graph.add_node(self.nid, label=subject)
+                    self.giant_graph.add_edge(
+                        0,
+                        self.nid,
+                        key="parse_{}_{}".format(self.nid, 0))
+                    self.nid += 1
+                obj = joined_triple[2]
+                if obj not in self.unique_dict and obj != '':
+                    self.unique_dict[obj] = self.nid
+                    self.unique_words[self.nid] = obj
+                    self.giant_graph.add_node(self.nid, label=obj)
+                    subj_id = self.unique_dict[subject]
+                    self.giant_graph.add_edge(
+                        subj_id,
+                        self.nid,
+                        key="parse_{}_{}".format(self.nid, subj_id), label=joined_triple[1])
+                    self.nid += 1
 
     def get_graph(self, sent):
         sent, doc = preprocess(sent)
@@ -107,7 +107,6 @@ class GraphBuilder:
         return self.gen_graph(triples)
 
     def gen_giant_graph(self, sents):
-
 
         for sent in sents:
             self.get_graph(sent)
@@ -133,7 +132,7 @@ def main_concept(sents):
     for sent in sents:
         _, doc = preprocess(sent)
         svos.append(get_svo(doc))
-    #print (svos)
+    # print (svos)
     subjects = [svo[0] for svo in svos]
     # subjects = svos[:][0]
 
@@ -142,7 +141,7 @@ def main_concept(sents):
     freq_dict = {}
     for subj in subjects:
         subj = " ".join(ele for ele in subj)
-        #subj = prepro(subj)
+        # subj = prepro(subj)
         if subj:
             tok_subj = subj.split()
             for tok in tok_subj:
@@ -152,10 +151,10 @@ def main_concept(sents):
                     freq_dict[tok] = 1
 
     freqs = freq_dict.items()
-    #print(freqs)
+    # print(freqs)
     freqs = sorted(freqs, key=operator.itemgetter(1), reverse=True)
 
-    #print(freqs)
+    # print(freqs)
     return freqs[0][0]
 
 
@@ -171,7 +170,7 @@ def get_mind_map(document):
     js = G.get_json()
     js = json.dumps(js)
     print(js)
-    #G.plot_graph(giant_graph)
+    # G.plot_graph(giant_graph)
     # with open('babur.json', 'w+') as f:
     #     f.write(js)
     # print("done")
